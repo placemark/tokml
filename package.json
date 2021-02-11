@@ -1,0 +1,22 @@
+{
+  "name": "@tmcw/tokml",
+  "version": "1.0.0",
+  "description": "Convert GeoJSON to KML",
+  "main": "index.js",
+  "author": "Tom MacWright",
+  "license": "MIT",
+  "scripts": {
+    "test": "tap"
+  },
+  "dependencies": {
+    "@types/geojson": "^7946.0.7",
+    "unist-builder": "^2.0.3",
+    "xast-util-to-xml": "^2.0.1",
+    "xastscript": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/tap": "^14.10.2",
+    "tap": "^14.11.0",
+    "typescript": "^4.1.5"
+  }
+}
