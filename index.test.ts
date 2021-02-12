@@ -24,9 +24,35 @@ test("toKML", (t) => {
             coordinates: [0, 2],
           },
         },
+        {
+          type: "Feature",
+          properties: {
+            foo: "bar",
+          },
+          geometry: {
+            type: "MultiPoint",
+            coordinates: [
+              [0, 2],
+              [1, 2],
+            ],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            foo: "bar",
+          },
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              [0, 2],
+              [1, 2],
+            ],
+          },
+        },
       ],
     }),
-    `<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><Placemark><Point><coordinates>0, 2</coordinates></Point></Placemark></Document></kml>`
+    `<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><Placemark><Point><coordinates>0, 2</coordinates></Point></Placemark><Placemark><MultiGeometry><Point><coordinates>0, 2</coordinates></Point><Point><coordinates>1, 2</coordinates></Point></MultiGeometry></Placemark><Placemark><LineString><coordinates>0, 2\n1, 2</coordinates></LineString></Placemark></Document></kml>`
   );
   t.end();
 });

@@ -1,6 +1,16 @@
 import u from "unist-builder";
 import x from "xastscript";
-import type { Feature, FeatureCollection, Geometry } from "geojson";
+import type { Element } from "xast";
+import type {
+  Feature,
+  FeatureCollection,
+  Geometry,
+  Polygon,
+  Point,
+  Position,
+  LineString,
+  MultiPoint,
+} from "geojson";
 import toXml from "xast-util-to-xml";
 
 export function toKML(featureCollection: FeatureCollection) {
@@ -22,15 +32,56 @@ function convertFeature(feature: Feature) {
   return x("Placemark", [convertGeometry(feature.geometry)]);
 }
 
+const linearRing = (ring: Position[]) =>
+  x("LinearRing", [
+    x("coordinates", [
+      u("text", ring.map((pair) => pair.join(", ")).join("\n")),
+    ]),
+  ]);
+
+const geometryConverters: Record<Geometry["type"], (arg0: any) => Element> = {
+  Point: (geometry: Point) =>
+    x("Point", [
+      x("coordinates", [u("text", geometry.coordinates.join(", "))]),
+    ]),
+  MultiPoint: (geometry: MultiPoint) =>
+    x(
+      "MultiGeometry",
+      geometry.coordinates.map((coordinates) =>
+        x("Point", [x("coordinates", [u("text", coordinates.join(", "))])])
+      )
+    ),
+  LineString: (geometry: LineString) =>
+    x("LineString", [
+      x("coordinates", [
+        u(
+          "text",
+          geometry.coordinates.map((pair) => pair.join(", ")).join("\n")
+        ),
+      ]),
+    ]),
+  MultiLineString: (geometry: LineString) =>
+    x("LineString", [
+      x("coordinates", [
+        u(
+          "text",
+          geometry.coordinates.map((pair) => pair.join(", ")).join("\n")
+        ),
+      ]),
+    ]),
+  Polygon: (geometry: Polygon) => {
+    const [outerBoundary, ...innerRings] = geometry.coordinates;
+    return x("Polygon", [
+      x("outerBoundaryIs", [linearRing(outerBoundary)]),
+      ...innerRings.map((innerRing) =>
+        x("innerBoundaryIs", [linearRing(innerRing)])
+      ),
+    ]);
+  },
+};
+
 function convertGeometry(geometry: Geometry) {
-  switch (geometry.type) {
-    case "Point":
-      return x("Point", [
-        x("coordinates", [u("text", geometry.coordinates.join(", "))]),
-      ]);
-    default:
-      throw new Error("not supported yet");
-  }
+  return geometryConverters[geometry.type](geometry);
 }
 
 export function hexToKmlColor(
@@ -154,12 +205,6 @@ function timestamp(_, options) {
 //
 // https://developers.google.com/kml/documentation/kmlreference#geometry
 var geometry = {
-  Point: function (_) {
-    return tag("Point", tag("coordinates", _.coordinates.join(",")));
-  },
-  LineString: function (_) {
-    return tag("LineString", tag("coordinates", linearring(_.coordinates)));
-  },
   Polygon: function (_) {
     if (!_.coordinates.length) return "";
     var outer = _.coordinates[0],
@@ -177,17 +222,6 @@ var geometry = {
         })
         .join("");
     return tag("Polygon", outerRing + innerRings);
-  },
-  MultiPoint: function (_) {
-    if (!_.coordinates.length) return "";
-    return tag(
-      "MultiGeometry",
-      _.coordinates
-        .map(function (c) {
-          return geometry.Point({ coordinates: c });
-        })
-        .join("")
-    );
   },
   MultiPolygon: function (_) {
     if (!_.coordinates.length) return "";
