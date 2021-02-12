@@ -32,56 +32,73 @@ function convertFeature(feature: Feature) {
   return x("Placemark", [convertGeometry(feature.geometry)]);
 }
 
-const linearRing = (ring: Position[]) =>
-  x("LinearRing", [
-    x("coordinates", [
-      u("text", ring.map((pair) => pair.join(", ")).join("\n")),
-    ]),
+function coord2(coordinates: Position[]) {
+  return x("coordinates", [
+    u("text", coordinates.map((pair) => pair.join(", ")).join("\n")),
   ]);
+}
 
-const geometryConverters: Record<Geometry["type"], (arg0: any) => Element> = {
-  Point: (geometry: Point) =>
-    x("Point", [
-      x("coordinates", [u("text", geometry.coordinates.join(", "))]),
-    ]),
-  MultiPoint: (geometry: MultiPoint) =>
-    x(
-      "MultiGeometry",
-      geometry.coordinates.map((coordinates) =>
-        x("Point", [x("coordinates", [u("text", coordinates.join(", "))])])
-      )
-    ),
-  LineString: (geometry: LineString) =>
-    x("LineString", [
-      x("coordinates", [
-        u(
-          "text",
-          geometry.coordinates.map((pair) => pair.join(", ")).join("\n")
-        ),
-      ]),
-    ]),
-  MultiLineString: (geometry: LineString) =>
-    x("LineString", [
-      x("coordinates", [
-        u(
-          "text",
-          geometry.coordinates.map((pair) => pair.join(", ")).join("\n")
-        ),
-      ]),
-    ]),
-  Polygon: (geometry: Polygon) => {
-    const [outerBoundary, ...innerRings] = geometry.coordinates;
-    return x("Polygon", [
-      x("outerBoundaryIs", [linearRing(outerBoundary)]),
-      ...innerRings.map((innerRing) =>
-        x("innerBoundaryIs", [linearRing(innerRing)])
-      ),
-    ]);
-  },
-};
+function coord1(coordinates: Position) {
+  return x("coordinates", [u("text", coordinates.join(", "))]);
+}
 
-function convertGeometry(geometry: Geometry) {
-  return geometryConverters[geometry.type](geometry);
+const linearRing = (ring: Position[]) => x("LinearRing", [coord2(ring)]);
+
+function convertGeometry(geometry: Geometry): Element {
+  switch (geometry.type) {
+    case "Point":
+      return x("Point", [coord1(geometry.coordinates)]);
+    case "MultiPoint":
+      return x(
+        "MultiGeometry",
+        geometry.coordinates.map((coordinates) =>
+          x("Point", [x("coordinates", [u("text", coordinates.join(", "))])])
+        )
+      );
+
+    case "LineString":
+      return x("LineString", [coord2(geometry.coordinates)]);
+    case "MultiLineString":
+      return x(
+        "MultiGeometry",
+        geometry.coordinates.map((coordinates) =>
+          x("LineString", [coord2(coordinates)])
+        )
+      );
+
+    case "Polygon":
+      const [outerBoundary, ...innerRings] = geometry.coordinates;
+      return x("Polygon", [
+        x("outerBoundaryIs", [linearRing(outerBoundary)]),
+        ...innerRings.map((innerRing) =>
+          x("innerBoundaryIs", [linearRing(innerRing)])
+        ),
+      ]);
+    case "MultiPolygon":
+      return x(
+        "MultiGeometry",
+        geometry.coordinates.map((coordinates) => {
+          const [outerBoundary, ...innerRings] = coordinates;
+          return x("Polygon", [
+            x("outerBoundaryIs", [linearRing(outerBoundary)]),
+            ...innerRings.map((innerRing) =>
+              x("innerBoundaryIs", [linearRing(innerRing)])
+            ),
+          ]);
+        })
+      );
+
+    case "GeometryCollection":
+      return x(
+        "MultiGeometry",
+        geometry.geometries.map((geometry) => {
+          return convertGeometry(geometry);
+        })
+      );
+
+    default:
+      throw new Error("oh no");
+  }
 }
 
 export function hexToKmlColor(
