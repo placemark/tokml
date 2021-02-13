@@ -178,6 +178,36 @@ test("toKML", (t) => {
       features: [
         {
           type: "Feature",
+          properties: null,
+          geometry: { type: "Point", coordinates: [0, 1] },
+        },
+      ],
+    }),
+    `<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><Placemark><Point><coordinates>0, 1</coordinates></Point></Placemark></Document></kml>`
+  );
+
+  t.same(
+    toKML({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            description: "test",
+          },
+          geometry: { type: "Point", coordinates: [0, 1] },
+        },
+      ],
+    }),
+    `<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><Placemark><description>test</description><ExtendedData></ExtendedData><Point><coordinates>0, 1</coordinates></Point></Placemark></Document></kml>`
+  );
+
+  t.same(
+    toKML({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
           properties: {
             name: "bar",
           },
