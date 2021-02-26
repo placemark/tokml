@@ -1,12 +1,17 @@
 {
   "name": "@tmcw/tokml",
-  "version": "1.0.0",
+  "version": "1.0.0.alpha-1",
   "description": "Convert GeoJSON to KML",
   "main": "index.js",
   "author": "Tom MacWright",
   "license": "MIT",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
   "scripts": {
-    "test": "tap"
+    "test": "tap",
+    "prepublishOnly": "tsc"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.7",
