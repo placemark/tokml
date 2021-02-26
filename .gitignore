@@ -1,3 +1,7 @@
 node_modules
 .nyc_output
 yarn-error.log
+index.js
+index.test.js
+index.test.d.ts
+index.d.ts
