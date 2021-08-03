@@ -1,6 +1,6 @@
 {
-  "name": "@tmcw/tokml",
-  "version": "1.0.0",
+  "name": "@placemarkio/tokml",
+  "version": "0.0.0",
   "description": "Convert GeoJSON to KML",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
