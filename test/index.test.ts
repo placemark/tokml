@@ -1,5 +1,5 @@
 import { test } from "tap";
-import { toKML } from "./";
+import { toKML } from "../src/index";
 
 // test("hexToKmlColor", (t) => {
 //   t.same(hexToKmlColor("123", 1), "ff332211");
