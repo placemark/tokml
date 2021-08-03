@@ -4,6 +4,10 @@ import type { Element } from "xast";
 import type { Feature, FeatureCollection, Geometry, Position } from "geojson";
 import toXml from "xast-util-to-xml";
 
+/**
+ * Convert a GeoJSON FeatureCollection to a string of
+ * KML data.
+ */
 export function toKML(featureCollection: FeatureCollection) {
   return toXml(
     u("root", [
@@ -26,14 +30,16 @@ function convertFeature(feature: Feature) {
   ]);
 }
 
+function join(position: Position) {
+  return position.join(", ");
+}
+
 function coord1(coordinates: Position) {
-  return x("coordinates", [u("text", coordinates.join(", "))]);
+  return x("coordinates", [u("text", join(coordinates))]);
 }
 
 function coord2(coordinates: Position[]) {
-  return x("coordinates", [
-    u("text", coordinates.map((pair) => pair.join(", ")).join("\n")),
-  ]);
+  return x("coordinates", [u("text", coordinates.map(join).join("\n"))]);
 }
 
 function propertiesToTags(properties: Feature["properties"]): Element[] {
@@ -45,7 +51,14 @@ function propertiesToTags(properties: Feature["properties"]): Element[] {
     x(
       "ExtendedData",
       Object.entries(otherProperties).map(([name, value]) =>
-        x("Data", { name: name }, [x("value", [u("text", value)])])
+        x("Data", { name: name }, [
+          x("value", [
+            u(
+              "text",
+              typeof value === "string" ? value : JSON.stringify(value)
+            ),
+          ]),
+        ])
       )
     ),
   ].filter(Boolean);
@@ -53,53 +66,65 @@ function propertiesToTags(properties: Feature["properties"]): Element[] {
 
 const linearRing = (ring: Position[]) => x("LinearRing", [coord2(ring)]);
 
+function convertMultiPoint(geometry: GeoJSON.MultiPoint) {
+  return x(
+    "MultiGeometry",
+    geometry.coordinates.map((coordinates) =>
+      convertGeometry({
+        type: "Point",
+        coordinates,
+      })
+    )
+  );
+}
+function convertMultiLineString(geometry: GeoJSON.MultiLineString) {
+  return x(
+    "MultiGeometry",
+    geometry.coordinates.map((coordinates) =>
+      convertGeometry({
+        type: "LineString",
+        coordinates,
+      })
+    )
+  );
+}
+
+function convertMultiPolygon(geometry: GeoJSON.MultiPolygon) {
+  return x(
+    "MultiGeometry",
+    geometry.coordinates.map((coordinates) =>
+      convertGeometry({
+        type: "Polygon",
+        coordinates,
+      })
+    )
+  );
+}
+
+function convertPolygon(geometry: GeoJSON.Polygon) {
+  const [outerBoundary, ...innerRings] = geometry.coordinates;
+  return x("Polygon", [
+    x("outerBoundaryIs", [linearRing(outerBoundary)]),
+    ...innerRings.map((innerRing) =>
+      x("innerBoundaryIs", [linearRing(innerRing)])
+    ),
+  ]);
+}
+
 function convertGeometry(geometry: Geometry): Element {
   switch (geometry.type) {
     case "Point":
       return x("Point", [coord1(geometry.coordinates)]);
     case "MultiPoint":
-      return x(
-        "MultiGeometry",
-        geometry.coordinates.map((coordinates) =>
-          convertGeometry({
-            type: "Point",
-            coordinates,
-          })
-        )
-      );
-
+      return convertMultiPoint(geometry);
     case "LineString":
       return x("LineString", [coord2(geometry.coordinates)]);
     case "MultiLineString":
-      return x(
-        "MultiGeometry",
-        geometry.coordinates.map((coordinates) =>
-          convertGeometry({
-            type: "LineString",
-            coordinates,
-          })
-        )
-      );
-
+      return convertMultiLineString(geometry);
     case "Polygon":
-      const [outerBoundary, ...innerRings] = geometry.coordinates;
-      return x("Polygon", [
-        x("outerBoundaryIs", [linearRing(outerBoundary)]),
-        ...innerRings.map((innerRing) =>
-          x("innerBoundaryIs", [linearRing(innerRing)])
-        ),
-      ]);
+      return convertPolygon(geometry);
     case "MultiPolygon":
-      return x(
-        "MultiGeometry",
-        geometry.coordinates.map((coordinates) =>
-          convertGeometry({
-            type: "Polygon",
-            coordinates,
-          })
-        )
-      );
-
+      return convertMultiPolygon(geometry);
     case "GeometryCollection":
       return x(
         "MultiGeometry",
@@ -107,36 +132,3 @@ function convertGeometry(geometry: Geometry): Element {
       );
   }
 }
-
-// export function hexToKmlColor(
-//   hexColor: string,
-//   opacity: number
-// ): string | undefined {
-//   if (opacity < 0.0 || opacity > 1.0) {
-//     throw new Error("Invalid opacity value, outside of 0-1 range");
-//   }
-//
-//   hexColor = hexColor.replace("#", "").toLowerCase();
-//
-//   if (hexColor.length === 3) {
-//     hexColor =
-//       hexColor[0] +
-//       hexColor[0] +
-//       hexColor[1] +
-//       hexColor[1] +
-//       hexColor[2] +
-//       hexColor[2];
-//   } else if (hexColor.length !== 6) {
-//     return undefined;
-//   }
-//
-//   const r = hexColor.substring(0, 2);
-//   const g = hexColor.substring(2, 4);
-//   const b = hexColor.substring(4, 6);
-//
-//   let o = Math.floor(opacity * 255)
-//     .toString(16)
-//     .padStart(2, "0");
-//
-//   return o + b + g + r;
-// }
