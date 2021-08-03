@@ -3,15 +3,15 @@
   "version": "1.0.0.alpha-1",
   "description": "Convert GeoJSON to KML",
   "main": "index.js",
+  "types": "index.d.ts",
   "author": "Tom MacWright",
   "license": "MIT",
   "files": [
-    "index.js",
-    "index.d.ts"
+    "dist"
   ],
   "scripts": {
     "test": "tap",
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "tsc --noEmit false --outDir dist"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.7",
