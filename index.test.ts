@@ -161,6 +161,8 @@ test("toKML", (t) => {
           type: "Feature",
           properties: {
             foo: "bar",
+            bar: { x: 1 },
+            q: 1,
           },
           geometry: {
             type: "GeometryCollection",
@@ -169,7 +171,7 @@ test("toKML", (t) => {
         },
       ],
     }),
-    `<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><Placemark><ExtendedData><Data name=\"foo\"><value>bar</value></Data></ExtendedData><MultiGeometry><Point><coordinates>0, 1</coordinates></Point></MultiGeometry></Placemark></Document></kml>`
+    `<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><Placemark><ExtendedData><Data name=\"foo\"><value>bar</value></Data><Data name=\"bar\"><value>{\"x\":1}</value></Data><Data name=\"q\"><value>1</value></Data></ExtendedData><MultiGeometry><Point><coordinates>0, 1</coordinates></Point></MultiGeometry></Placemark></Document></kml>`
   );
 
   t.same(
