@@ -1,6 +1,6 @@
 {
   "name": "@placemarkio/tokml",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Convert GeoJSON to KML",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
