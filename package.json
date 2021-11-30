@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Convert GeoJSON to KML",
   "main": "dist/index.js",
+  "module": "dist/index.esm.js",
   "typings": "dist/index.d.ts",
   "author": "Tom MacWright",
   "license": "MIT",
