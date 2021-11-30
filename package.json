@@ -3,29 +3,48 @@
   "version": "0.0.1",
   "description": "Convert GeoJSON to KML",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "author": "Tom MacWright",
   "license": "MIT",
-  "keywords": ["kml", "geojson"],
+  "keywords": [
+    "kml",
+    "geojson"
+  ],
   "publishConfig": {
     "access": "public"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "test": "tap",
-    "prepublishOnly": "tsc --noEmit false --outDir dist"
+    "test": "jest",
+    "lint": "eslint . && tsc --noEmit",
+    "prepublishOnly": "microbundle"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.7",
-    "unist-builder": "^2.0.3",
-    "xast-util-to-xml": "^2.0.1",
-    "xastscript": "^2.1.1"
+    "@types/geojson": "^7946.0.8",
+    "@types/jest": "^27.0.3",
+    "unist-builder": "^3.0.0",
+    "xast-util-to-xml": "^3.0.0",
+    "xastscript": "^3.0.0"
   },
   "devDependencies": {
-    "@types/tap": "^14.10.2",
-    "tap": "^14.11.0",
-    "typescript": "^4.1.5"
+    "@swc/core": "^1.2.114",
+    "@swc/jest": "^0.2.11",
+    "eslint": "^8.3.0",
+    "jest": "^27.4.2",
+    "microbundle": "^0.14.2",
+    "typescript": "^4.5.2"
   }
 }

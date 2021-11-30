@@ -1,14 +1,14 @@
-import u from "unist-builder";
-import x from "xastscript";
+import { u } from "unist-builder";
+import { x } from "xastscript";
 import type { Element } from "xast";
 import type { Feature, FeatureCollection, Geometry, Position } from "geojson";
-import toXml from "xast-util-to-xml";
+import { toXml } from "xast-util-to-xml";
 
 /**
  * Convert a GeoJSON FeatureCollection to a string of
  * KML data.
  */
-export function toKML(featureCollection: FeatureCollection) {
+export function toKML(featureCollection: FeatureCollection<Geometry | null>) {
   return toXml(
     u("root", [
       x(
@@ -23,10 +23,10 @@ export function toKML(featureCollection: FeatureCollection) {
   );
 }
 
-function convertFeature(feature: Feature) {
+function convertFeature(feature: Feature<Geometry | null>) {
   return x("Placemark", [
     ...propertiesToTags(feature.properties),
-    convertGeometry(feature.geometry),
+    ...(feature.geometry ? [convertGeometry(feature.geometry)] : []),
   ]);
 }
 
