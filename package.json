@@ -34,13 +34,13 @@
     "prepublishOnly": "microbundle"
   },
   "dependencies": {
+  },
+  "devDependencies": {
     "@types/geojson": "^7946.0.8",
     "@types/jest": "^27.0.3",
     "unist-builder": "^3.0.0",
     "xast-util-to-xml": "^3.0.0",
-    "xastscript": "^3.0.0"
-  },
-  "devDependencies": {
+    "xastscript": "^3.0.0",
     "@swc/core": "^1.2.114",
     "@swc/jest": "^0.2.11",
     "eslint": "^8.3.0",
