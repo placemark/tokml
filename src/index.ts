@@ -31,7 +31,7 @@ function convertFeature(feature: Feature<Geometry | null>) {
 }
 
 function join(position: Position) {
-  return position.join(", ");
+  return `${position[0]}, ${position[1]}`;
 }
 
 function coord1(coordinates: Position) {
