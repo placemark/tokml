@@ -1,4 +1,4 @@
-import { toKML } from "../src/index";
+import { toKML } from '../src/index';
 
 // test("hexToKmlColor", (t) => {
 //   expect(hexToKmlColor("123", 1), "ff332211");
@@ -8,29 +8,29 @@ import { toKML } from "../src/index";
 //   t.end();
 // });
 
-describe("toKML", () => {
-  it("#toKML", () => {
+describe('toKML', () => {
+  it('#toKML', () => {
     expect(
       toKML({
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              foo: "bar",
+              foo: 'bar',
             },
             geometry: {
-              type: "Point",
+              type: 'Point',
               coordinates: [0, 2],
             },
           },
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              foo: "bar",
+              foo: 'bar',
             },
             geometry: {
-              type: "MultiPoint",
+              type: 'MultiPoint',
               coordinates: [
                 [0, 2],
                 [1, 2],
@@ -38,12 +38,12 @@ describe("toKML", () => {
             },
           },
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              foo: "bar",
+              foo: 'bar',
             },
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0, 2],
                 [1, 2],
@@ -58,15 +58,15 @@ describe("toKML", () => {
 
     expect(
       toKML({
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              foo: "bar",
+              foo: 'bar',
             },
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0, 2],
@@ -91,15 +91,15 @@ describe("toKML", () => {
 
     expect(
       toKML({
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              foo: "bar",
+              foo: 'bar',
             },
             geometry: {
-              type: "MultiLineString",
+              type: 'MultiLineString',
               coordinates: [
                 [
                   [0, 2],
@@ -124,15 +124,15 @@ describe("toKML", () => {
 
     expect(
       toKML({
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              foo: "bar",
+              foo: 'bar',
             },
             geometry: {
-              type: "MultiPolygon",
+              type: 'MultiPolygon',
               coordinates: [
                 [
                   [
@@ -159,18 +159,18 @@ describe("toKML", () => {
 
     expect(
       toKML({
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              foo: "bar",
+              foo: 'bar',
               bar: { x: 1 },
               q: 1,
             },
             geometry: {
-              type: "GeometryCollection",
-              geometries: [{ type: "Point", coordinates: [0, 1] }],
+              type: 'GeometryCollection',
+              geometries: [{ type: 'Point', coordinates: [0, 1] }],
             },
           },
         ],
@@ -181,12 +181,12 @@ describe("toKML", () => {
 
     expect(
       toKML({
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             properties: null,
-            geometry: { type: "Point", coordinates: [0, 1] },
+            geometry: { type: 'Point', coordinates: [0, 1] },
           },
         ],
       })
@@ -196,14 +196,14 @@ describe("toKML", () => {
 
     expect(
       toKML({
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              description: "test",
+              description: 'test',
             },
-            geometry: { type: "Point", coordinates: [0, 1] },
+            geometry: { type: 'Point', coordinates: [0, 1] },
           },
         ],
       })
@@ -213,12 +213,12 @@ describe("toKML", () => {
 
     expect(
       toKML({
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              name: "bar",
+              name: 'bar',
             },
             geometry: null,
           },
@@ -230,14 +230,33 @@ describe("toKML", () => {
 
     expect(
       toKML({
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             properties: {
-              name: "bar",
+              name: 'bar',
             },
-            geometry: { type: "Point", coordinates: [0, 1] },
+            geometry: { type: 'Point', coordinates: [0, 1] },
+          },
+        ],
+      })
+    ).toEqual(
+      `<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><Placemark><name>bar</name><ExtendedData></ExtendedData><Point><coordinates>0, 1</coordinates></Point></Placemark></Document></kml>`
+    );
+  });
+
+  it('ignores coordinates past #2', () => {
+    expect(
+      toKML({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              name: 'bar',
+            },
+            geometry: { type: 'Point', coordinates: [0, 1, 2] },
           },
         ],
       })
