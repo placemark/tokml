@@ -1,8 +1,8 @@
-import { u } from "unist-builder";
-import { x } from "xastscript";
-import type { Element } from "xast";
-import type { Feature, FeatureCollection, Geometry, Position } from "geojson";
-import { toXml } from "xast-util-to-xml";
+import { u } from 'unist-builder';
+import { x } from 'xastscript';
+import type { Element } from 'xast';
+import type { Feature, FeatureCollection, Geometry, Position } from 'geojson';
+import { toXml } from 'xast-util-to-xml';
 
 /**
  * Convert a GeoJSON FeatureCollection to a string of
@@ -10,12 +10,12 @@ import { toXml } from "xast-util-to-xml";
  */
 export function toKML(featureCollection: FeatureCollection<Geometry | null>) {
   return toXml(
-    u("root", [
+    u('root', [
       x(
-        "kml",
-        { xmlns: "http://www.opengis.net/kml/2.2" },
+        'kml',
+        { xmlns: 'http://www.opengis.net/kml/2.2' },
         x(
-          "Document",
+          'Document',
           featureCollection.features.map((feature) => convertFeature(feature))
         )
       ),
@@ -24,38 +24,38 @@ export function toKML(featureCollection: FeatureCollection<Geometry | null>) {
 }
 
 function convertFeature(feature: Feature<Geometry | null>) {
-  return x("Placemark", [
+  return x('Placemark', [
     ...propertiesToTags(feature.properties),
     ...(feature.geometry ? [convertGeometry(feature.geometry)] : []),
   ]);
 }
 
 function join(position: Position) {
-  return `${position[0]}, ${position[1]}`;
+  return `${position[0]},${position[1]}`;
 }
 
 function coord1(coordinates: Position) {
-  return x("coordinates", [u("text", join(coordinates))]);
+  return x('coordinates', [u('text', join(coordinates))]);
 }
 
 function coord2(coordinates: Position[]) {
-  return x("coordinates", [u("text", coordinates.map(join).join("\n"))]);
+  return x('coordinates', [u('text', coordinates.map(join).join('\n'))]);
 }
 
-function propertiesToTags(properties: Feature["properties"]): Element[] {
+function propertiesToTags(properties: Feature['properties']): Element[] {
   if (!properties) return [];
   const { name, description, ...otherProperties } = properties;
   return [
-    name && x("name", [u("text", name)]),
-    description && x("description", [u("text", description)]),
+    name && x('name', [u('text', name)]),
+    description && x('description', [u('text', description)]),
     x(
-      "ExtendedData",
+      'ExtendedData',
       Object.entries(otherProperties).map(([name, value]) =>
-        x("Data", { name: name }, [
-          x("value", [
+        x('Data', { name: name }, [
+          x('value', [
             u(
-              "text",
-              typeof value === "string" ? value : JSON.stringify(value)
+              'text',
+              typeof value === 'string' ? value : JSON.stringify(value)
             ),
           ]),
         ])
@@ -64,14 +64,14 @@ function propertiesToTags(properties: Feature["properties"]): Element[] {
   ].filter(Boolean);
 }
 
-const linearRing = (ring: Position[]) => x("LinearRing", [coord2(ring)]);
+const linearRing = (ring: Position[]) => x('LinearRing', [coord2(ring)]);
 
 function convertMultiPoint(geometry: GeoJSON.MultiPoint) {
   return x(
-    "MultiGeometry",
+    'MultiGeometry',
     geometry.coordinates.map((coordinates) =>
       convertGeometry({
-        type: "Point",
+        type: 'Point',
         coordinates,
       })
     )
@@ -79,10 +79,10 @@ function convertMultiPoint(geometry: GeoJSON.MultiPoint) {
 }
 function convertMultiLineString(geometry: GeoJSON.MultiLineString) {
   return x(
-    "MultiGeometry",
+    'MultiGeometry',
     geometry.coordinates.map((coordinates) =>
       convertGeometry({
-        type: "LineString",
+        type: 'LineString',
         coordinates,
       })
     )
@@ -91,10 +91,10 @@ function convertMultiLineString(geometry: GeoJSON.MultiLineString) {
 
 function convertMultiPolygon(geometry: GeoJSON.MultiPolygon) {
   return x(
-    "MultiGeometry",
+    'MultiGeometry',
     geometry.coordinates.map((coordinates) =>
       convertGeometry({
-        type: "Polygon",
+        type: 'Polygon',
         coordinates,
       })
     )
@@ -103,31 +103,31 @@ function convertMultiPolygon(geometry: GeoJSON.MultiPolygon) {
 
 function convertPolygon(geometry: GeoJSON.Polygon) {
   const [outerBoundary, ...innerRings] = geometry.coordinates;
-  return x("Polygon", [
-    x("outerBoundaryIs", [linearRing(outerBoundary)]),
+  return x('Polygon', [
+    x('outerBoundaryIs', [linearRing(outerBoundary)]),
     ...innerRings.map((innerRing) =>
-      x("innerBoundaryIs", [linearRing(innerRing)])
+      x('innerBoundaryIs', [linearRing(innerRing)])
     ),
   ]);
 }
 
 function convertGeometry(geometry: Geometry): Element {
   switch (geometry.type) {
-    case "Point":
-      return x("Point", [coord1(geometry.coordinates)]);
-    case "MultiPoint":
+    case 'Point':
+      return x('Point', [coord1(geometry.coordinates)]);
+    case 'MultiPoint':
       return convertMultiPoint(geometry);
-    case "LineString":
-      return x("LineString", [coord2(geometry.coordinates)]);
-    case "MultiLineString":
+    case 'LineString':
+      return x('LineString', [coord2(geometry.coordinates)]);
+    case 'MultiLineString':
       return convertMultiLineString(geometry);
-    case "Polygon":
+    case 'Polygon':
       return convertPolygon(geometry);
-    case "MultiPolygon":
+    case 'MultiPolygon':
       return convertMultiPolygon(geometry);
-    case "GeometryCollection":
+    case 'GeometryCollection':
       return x(
-        "MultiGeometry",
+        'MultiGeometry',
         geometry.geometries.map((geometry) => convertGeometry(geometry))
       );
   }
