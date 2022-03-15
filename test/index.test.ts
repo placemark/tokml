@@ -1,4 +1,115 @@
-import { toKML } from '../lib/index';
+import { toKML, foldersToKML } from '../lib/index';
+
+describe('foldersToKML', () => {
+  it('#foldersToKML', () => {
+    expect(
+      foldersToKML({
+        type: 'root',
+        children: [
+          {
+            type: 'Feature',
+            properties: {
+              foo: 'bar',
+            },
+
+            geometry: {
+              type: 'Point',
+              coordinates: [0, 2],
+            },
+          },
+
+          {
+            type: 'folder',
+            meta: { name: 'Hi' },
+            children: [],
+          },
+
+          {
+            type: 'folder',
+            meta: { name: 'Hi' },
+            children: [
+              {
+                type: 'Feature',
+                properties: {
+                  foo: 'bar',
+                },
+
+                geometry: {
+                  type: 'LineString',
+                  coordinates: [
+                    [0, 2],
+                    [1, 2],
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      })
+    ).toMatchInlineSnapshot(`
+      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      <Placemark>
+      <ExtendedData>
+        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Point><coordinates>0,2</coordinates></Point></Placemark>
+      <Folder>
+      <name>Hi</name>
+        </Folder>
+      <Folder>
+      <name>Hi</name>
+        
+      <Placemark>
+      <ExtendedData>
+        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <LineString><coordinates>0,2
+      1,2</coordinates></LineString></Placemark></Folder></Document></kml>"
+    `);
+    expect(
+      foldersToKML({
+        type: 'root',
+        children: [
+          {
+            type: 'Feature',
+            properties: {
+              foo: 'bar',
+            },
+
+            geometry: {
+              type: 'Point',
+              coordinates: [0, 2],
+            },
+          },
+
+          {
+            type: 'Feature',
+            properties: {
+              foo: 'bar',
+            },
+
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [0, 2],
+                [1, 2],
+              ],
+            },
+          },
+        ],
+      })
+    ).toMatchInlineSnapshot(`
+      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      <Placemark>
+      <ExtendedData>
+        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Point><coordinates>0,2</coordinates></Point></Placemark>
+      <Placemark>
+      <ExtendedData>
+        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <LineString><coordinates>0,2
+      1,2</coordinates></LineString></Placemark></Document></kml>"
+    `);
+  });
+});
 
 describe('toKML', () => {
   it('#toKML', () => {

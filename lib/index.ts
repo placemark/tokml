@@ -1,11 +1,37 @@
 import { u } from 'unist-builder';
 import { x } from 'xastscript';
 import type { Element } from 'xast';
+import type { Root, Folder } from '@tmcw/togeojson';
 import type { Feature, FeatureCollection, Geometry, Position } from 'geojson';
 import { toXml } from 'xast-util-to-xml';
 
+type F = Feature<Geometry | null>;
+
 const BR = u('text', '\n');
 const TAB = u('text', '  ');
+
+type Literal = typeof BR;
+
+/**
+ * Convert nested folder structure to KML. This expects
+ * input that follows the same patterns as [toGeoJSON](https://github.com/placemark/togeojson)'s
+ * kmlWithFolders method: a tree of folders and features,
+ * starting with a root element.
+ */
+export function foldersToKML(root: Root): string {
+  return toXml(
+    u('root', [
+      x(
+        'kml',
+        { xmlns: 'http://www.opengis.net/kml/2.2' },
+        x(
+          'Document',
+          root.children.flatMap((child) => convertChild(child))
+        )
+      ),
+    ])
+  );
+}
 
 /**
  * Convert a GeoJSON FeatureCollection to a string of
@@ -30,7 +56,44 @@ export function toKML(
   );
 }
 
-function convertFeature(feature: Feature<Geometry | null>) {
+function convertChild(child: F | Folder) {
+  switch (child.type) {
+    case 'Feature':
+      return convertFeature(child);
+    case 'folder':
+      return convertFolder(child);
+  }
+}
+
+function convertFolder(folder: Folder): Array<Literal | Element> {
+  return [
+    BR,
+    x('Folder', [
+      BR,
+      ...folderMeta(folder.meta),
+      BR,
+      TAB,
+      ...folder.children.flatMap((child) => convertChild(child)),
+    ]),
+  ];
+}
+
+const META_PROPERTIES: Array<keyof Folder['meta']> = [
+  'address',
+  'description',
+  'name',
+  'open',
+  'visibility',
+  'phoneNumber',
+];
+
+function folderMeta(meta: Folder['meta']): Element[] {
+  return META_PROPERTIES.filter((p) => meta[p] !== undefined).map((p) => {
+    return x(p, [u('text', String(meta[p]))]);
+  });
+}
+
+function convertFeature(feature: F) {
   return [
     BR,
     x('Placemark', [
