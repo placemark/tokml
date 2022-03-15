@@ -66,9 +66,14 @@ function convertChild(child: F | Folder) {
 }
 
 function convertFolder(folder: Folder): Array<Literal | Element> {
+  const id = ['string', 'number'].includes(typeof folder.meta.id)
+    ? {
+        id: String(folder.meta.id),
+      }
+    : {};
   return [
     BR,
-    x('Folder', [
+    x('Folder', id, [
       BR,
       ...folderMeta(folder.meta),
       BR,
@@ -78,14 +83,14 @@ function convertFolder(folder: Folder): Array<Literal | Element> {
   ];
 }
 
-const META_PROPERTIES: Array<keyof Folder['meta']> = [
+const META_PROPERTIES = [
   'address',
   'description',
   'name',
   'open',
   'visibility',
   'phoneNumber',
-];
+] as const;
 
 function folderMeta(meta: Folder['meta']): Element[] {
   return META_PROPERTIES.filter((p) => meta[p] !== undefined).map((p) => {

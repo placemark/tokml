@@ -671,10 +671,10 @@
   dependencies:
     "@jest/create-cache-key-function" "^27.4.2"
 
-"@tmcw/togeojson@5.0.0-3":
-  version "5.0.0-3"
-  resolved "https://registry.yarnpkg.com/@tmcw/togeojson/-/togeojson-5.0.0-3.tgz#3da7415e0a948e7a99251d6bfc1b445edb19aaac"
-  integrity sha512-STMt6EcGbwqxEpas2xgg0Ww056xnCxFnUNvU/Fa4/see9ot+NLA/qCzVl+wXJwXjH7rnSaoMv8zK9w/u5umvKA==
+"@tmcw/togeojson@5.0.0-4":
+  version "5.0.0-4"
+  resolved "https://registry.yarnpkg.com/@tmcw/togeojson/-/togeojson-5.0.0-4.tgz#987b4e5059b1e7301935bcdb48fba37e2518760a"
+  integrity sha512-JFLaQK2ZSfaLRyG25uSlSTIizHxE4T0nR6HuR85g4jK/7Qh54UYC78FmS0AXsvczpU3sVX8nQw0Bm2NvVCqLuw==
 
 "@tootallnate/once@1":
   version "1.1.2"
