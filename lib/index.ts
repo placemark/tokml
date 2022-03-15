@@ -13,8 +13,10 @@ const TAB = u('text', '  ');
 type Literal = typeof BR;
 
 /**
- * Convert a GeoJSON FeatureCollection to a string of
- * KML data.
+ * Convert nested folder structure to KML. This expects
+ * input that follows the same patterns as [toGeoJSON](https://github.com/placemark/togeojson)'s
+ * kmlWithFolders method: a tree of folders and features,
+ * starting with a root element.
  */
 export function foldersToKML(root: Root): string {
   return toXml(
