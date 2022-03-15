@@ -44,7 +44,7 @@
     "@rollup/plugin-typescript": "^8.3.1",
     "@swc/core": "^1.2.114",
     "@swc/jest": "^0.2.11",
-    "@tmcw/togeojson": "5.0.0-3",
+    "@tmcw/togeojson": "5.0.0-4",
     "@types/geojson": "^7946.0.8",
     "@types/jest": "^27.0.3",
     "eslint": "^8.3.0",

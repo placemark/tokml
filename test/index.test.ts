@@ -20,7 +20,7 @@ describe('foldersToKML', () => {
 
           {
             type: 'folder',
-            meta: { name: 'Hi' },
+            meta: { name: 'Hi', id: 'f00' },
             children: [],
           },
 
@@ -52,7 +52,7 @@ describe('foldersToKML', () => {
       <ExtendedData>
         <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
         <Point><coordinates>0,2</coordinates></Point></Placemark>
-      <Folder>
+      <Folder id=\\"f00\\">
       <name>Hi</name>
         </Folder>
       <Folder>

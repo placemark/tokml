@@ -66,9 +66,14 @@ function convertChild(child: F | Folder) {
 }
 
 function convertFolder(folder: Folder): Array<Literal | Element> {
+  const id = ['string', 'number'].includes(typeof folder.meta.id)
+    ? {
+        id: String(folder.meta.id),
+      }
+    : {};
   return [
     BR,
-    x('Folder', [
+    x('Folder', id, [
       BR,
       ...folderMeta(folder.meta),
       BR,
