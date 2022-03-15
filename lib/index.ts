@@ -83,14 +83,14 @@ function convertFolder(folder: Folder): Array<Literal | Element> {
   ];
 }
 
-const META_PROPERTIES: Array<keyof Folder['meta']> = [
+const META_PROPERTIES = [
   'address',
   'description',
   'name',
   'open',
   'visibility',
   'phoneNumber',
-];
+] as const;
 
 function folderMeta(meta: Folder['meta']): Element[] {
   return META_PROPERTIES.filter((p) => meta[p] !== undefined).map((p) => {
