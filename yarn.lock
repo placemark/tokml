@@ -666,6 +666,11 @@
   dependencies:
     "@jest/create-cache-key-function" "^27.4.2"
 
+"@tmcw/togeojson@5.0.0-3":
+  version "5.0.0-3"
+  resolved "https://registry.yarnpkg.com/@tmcw/togeojson/-/togeojson-5.0.0-3.tgz#3da7415e0a948e7a99251d6bfc1b445edb19aaac"
+  integrity sha512-STMt6EcGbwqxEpas2xgg0Ww056xnCxFnUNvU/Fa4/see9ot+NLA/qCzVl+wXJwXjH7rnSaoMv8zK9w/u5umvKA==
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
