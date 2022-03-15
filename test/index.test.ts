@@ -1,4 +1,4 @@
-import { toKML } from '../src/index';
+import { toKML } from '../lib/index';
 
 // test("hexToKmlColor", (t) => {
 //   expect(hexToKmlColor("123", 1), "ff332211");
