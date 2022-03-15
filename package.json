@@ -36,7 +36,7 @@
     "test": "jest",
     "lint": "eslint . && tsc --noEmit",
     "doc": "typedoc --options typedoc.json",
-    "prepare": "rollup -c rollup.config.js"
+    "prepare": "rollup -c rollup.config.js && npm run doc"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.1.3",
