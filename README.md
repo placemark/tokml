@@ -6,12 +6,7 @@ Convert GeoJSON to KML.
 
 This package is [`@placemarkio/tokml`](https://www.npmjs.com/package/@placemarkio/tokml)
 
-## API
-
-`toKML(featureCollection: FeatureCollection): string`
-
-This is the main method of this module: provide it with a GeoJSON
-FeatureCollection object, and it will return a KML string.
+## [📕 API Documentation](https://placemark.github.io/tokml/)
 
 Notes:
 
