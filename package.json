@@ -36,7 +36,7 @@
     "test": "jest",
     "lint": "eslint . && tsc --noEmit",
     "doc": "typedoc --options typedoc.json",
-    "prepare": "rollup -c rollup.config.js && npm run doc",
+    "prepare": "rollup -c rollup.config.js && npm run doc && cp CNAME docs/CNAME",
     "release": "standard-version"
   },
   "devDependencies": {
