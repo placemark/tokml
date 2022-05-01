@@ -461,4 +461,27 @@ describe('toKML', () => {
         <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
     `);
   });
+
+  it('includes feature id', () => {
+    expect(
+      toKML({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            id: 42,
+            properties: {
+              name: 'bar',
+            },
+            geometry: { type: 'Point', coordinates: [0, 1] },
+          },
+        ],
+      })
+    ).toMatchInlineSnapshot(`
+      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      <Placemark id=\\"42\\">
+      <name>bar</name><ExtendedData></ExtendedData>
+        <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
+    `);
+  });
 });
