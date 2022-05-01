@@ -99,9 +99,15 @@ function folderMeta(meta: Folder['meta']): Element[] {
 }
 
 function convertFeature(feature: F) {
+  const { id } = feature;
+  const idMember = ['string', 'number'].includes(typeof id)
+    ? {
+        id: id,
+      }
+    : {};
   return [
     BR,
-    x('Placemark', [
+    x('Placemark', idMember, [
       BR,
       ...propertiesToTags(feature.properties),
       BR,
