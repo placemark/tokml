@@ -10,7 +10,7 @@ export default [
   {
     input,
     output: {
-      file: 'dist/tokml.es.js',
+      file: 'dist/tokml.es.mjs',
       format: 'es',
       sourcemap,
     },

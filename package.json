@@ -3,13 +3,13 @@
   "version": "0.3.0",
   "description": "Convert GeoJSON to KML",
   "main": "dist/tokml.cjs",
-  "module": "dist/tokml.esm.js",
+  "module": "dist/tokml.es.mjs",
   "typings": "dist/index.d.ts",
   "author": "Tom MacWright",
   "license": "MIT",
   "exports": {
     "require": "./dist/tokml.cjs",
-    "default": "./dist/tokml.es.js"
+    "default": "./dist/tokml.es.mjs"
   },
   "keywords": [
     "kml",
