@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.2](https://github.com/placemark/tokml/compare/v0.3.1...v0.3.2) (2022-06-12)
+
+
+### Features
+
+* Round-trip type: html values ([#21](https://github.com/placemark/tokml/issues/21)) ([1ee571d](https://github.com/placemark/tokml/commit/1ee571dfa659c5b250eb95c224c96fe2eb743f56))
+
 ### [0.3.2-0](https://github.com/placemark/tokml/compare/v0.3.1...v0.3.2-0) (2022-06-12)
 
 
