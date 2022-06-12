@@ -129,12 +129,48 @@ function coord2(coordinates: Position[]): Element {
   return x('coordinates', [u('text', coordinates.map(join).join('\n'))]);
 }
 
+function toString(value: any): string {
+  switch (typeof value) {
+    case 'string': {
+      return value;
+    }
+    case 'boolean':
+    case 'number': {
+      return String(value);
+    }
+    case 'object': {
+      try {
+        return JSON.stringify(value);
+      } catch (e) {
+        return '';
+      }
+    }
+  }
+  return '';
+}
+
+function maybeCData(value: any) {
+  if (
+    value &&
+    typeof value === 'object' &&
+    '@type' in value &&
+    value['@type'] === 'html' &&
+    'value' in value &&
+    typeof value.value === 'string'
+  ) {
+    return u('cdata', value.value);
+  }
+
+  return toString(value);
+}
+
 function propertiesToTags(properties: Feature['properties']): Element[] {
   if (!properties) return [];
   const { name, description, ...otherProperties } = properties;
+
   return [
-    name && x('name', [u('text', name)]),
-    description && x('description', [u('text', description)]),
+    name && x('name', [u('text', toString(name))]),
+    description && x('description', [u('text', maybeCData(description))]),
     x(
       'ExtendedData',
       Object.entries(otherProperties).flatMap(([name, value]) => [

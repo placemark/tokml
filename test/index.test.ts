@@ -484,4 +484,53 @@ describe('toKML', () => {
         <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
     `);
   });
+
+  it('json values', () => {
+    expect(
+      toKML({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            id: 42,
+            properties: {
+              name: { x: 'bar' },
+            },
+
+            geometry: { type: 'Point', coordinates: [0, 1] },
+          },
+        ],
+      })
+    ).toMatchInlineSnapshot(`
+      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      <Placemark id=\\"42\\">
+      <name>{\\"x\\":\\"bar\\"}</name><ExtendedData></ExtendedData>
+        <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
+    `);
+  });
+
+  it('html values', () => {
+    expect(
+      toKML({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            id: 42,
+            properties: {
+              name: 'bar',
+              description: { '@type': 'html', value: '<b>bar</b>' },
+            },
+
+            geometry: { type: 'Point', coordinates: [0, 1] },
+          },
+        ],
+      })
+    ).toMatchInlineSnapshot(`
+      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      <Placemark id=\\"42\\">
+      <name>bar</name><description><![CDATA[<b>bar</b>]]></description><ExtendedData></ExtendedData>
+        <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
+    `);
+  });
 });
