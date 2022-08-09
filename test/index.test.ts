@@ -509,6 +509,41 @@ describe('toKML', () => {
     `);
   });
 
+  it('visibility', () => {
+    expect(
+      toKML({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              visibility: false,
+            },
+
+            geometry: { type: 'Point', coordinates: [0, 1] },
+          },
+
+          {
+            type: 'Feature',
+            properties: {
+              visibility: true,
+            },
+
+            geometry: { type: 'Point', coordinates: [0, 1] },
+          },
+        ],
+      })
+    ).toMatchInlineSnapshot(`
+      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      <Placemark>
+      <visibility>0</visibility><ExtendedData></ExtendedData>
+        <Point><coordinates>0,1</coordinates></Point></Placemark>
+      <Placemark>
+      <visibility>1</visibility><ExtendedData></ExtendedData>
+        <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
+    `);
+  });
+
   it('html values', () => {
     expect(
       toKML({

@@ -166,11 +166,13 @@ function maybeCData(value: any) {
 
 function propertiesToTags(properties: Feature['properties']): Element[] {
   if (!properties) return [];
-  const { name, description, ...otherProperties } = properties;
+  const { name, description, visibility, ...otherProperties } = properties;
 
   return [
     name && x('name', [u('text', toString(name))]),
     description && x('description', [u('text', maybeCData(description))]),
+    visibility !== undefined &&
+      x('visibility', [u('text', visibility ? '1' : '0')]),
     x(
       'ExtendedData',
       Object.entries(otherProperties).flatMap(([name, value]) => [
