@@ -1,4 +1,4 @@
-import { test, describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { toKML, foldersToKML } from '../lib/index';
 
 describe('foldersToKML', () => {
