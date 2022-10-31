@@ -1,5 +1,47 @@
-import { describe, it, expect } from 'vitest';
+import { test, describe, it, expect } from 'vitest';
 import { toKML, foldersToKML } from '../lib/index';
+import { kml } from '@tmcw/togeojson';
+import { DOMParser } from '@xmldom/xmldom';
+
+test('GroundOverlay', () => {
+  const gj = kml(
+    new DOMParser().parseFromString(`<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Folder>
+    <name>Ground Overlays</name>
+    <description>Examples of ground overlays</description>
+    <GroundOverlay>
+      <name>Large-scale overlay on terrain</name>
+      <description>Overlay shows Mount Etna erupting
+          on July 13th, 2001.</description>
+      <Icon>
+        <href>https://tmcw-drop.s3-us-west-1.amazonaws.com/etna%20(1).jpg</href>
+      </Icon>
+      <LatLonBox>
+        <north>37.91904192681665</north>
+        <south>37.46543388598137</south>
+        <east>15.35832653742206</east>
+        <west>14.60128369746704</west>
+        <rotation>-0.1556640799496235</rotation>
+      </LatLonBox>
+    </GroundOverlay>
+  </Folder>
+</kml>`)
+  );
+
+  expect(toKML(gj)).toMatchInlineSnapshot(`
+    "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+    <GroundOverlay>
+    <name>Large-scale overlay on terrain</name><description>Overlay shows Mount Etna erupting
+              on July 13th, 2001.</description><icon>https://tmcw-drop.s3-us-west-1.amazonaws.com/etna%20(1).jpg</icon><ExtendedData>
+      <Data name=\\"@geometry-type\\"><value>groundoverlay</value></Data></ExtendedData>
+      <gx:LatLonQuad>14.600668902543442,37.91801270483731
+    15.35770894852841,37.92006947469352
+    15.358941332345658,37.466463107960706
+    14.60190128636069,37.464406338104496
+    14.600668902543442,37.91801270483731</gx:LatLonQuad></GroundOverlay></Document></kml>"
+  `);
+});
 
 describe('foldersToKML', () => {
   it('#foldersToKML', () => {

@@ -98,8 +98,41 @@ function folderMeta(meta: Folder['meta']): Element[] {
   });
 }
 
+function convertGroundOverlay(feature: F) {
+  const { id } = feature;
+
+  const idMember = ['string', 'number'].includes(typeof id)
+    ? {
+        id: id,
+      }
+    : {};
+  return [
+    BR,
+    x('GroundOverlay', idMember, [
+      BR,
+      ...propertiesToTags(feature.properties),
+      BR,
+      TAB,
+      ...(feature.geometry
+        ? [
+            x(
+              'gx:LatLonQuad',
+              [],
+              [u('text', feature.geometry.coordinates[0].map(join).join('\n'))]
+            ),
+          ]
+        : []),
+    ]),
+  ];
+}
+
 function convertFeature(feature: F) {
   const { id } = feature;
+
+  if (feature.properties?.['@geometry-type'] === 'groundoverlay') {
+    return convertGroundOverlay(feature);
+  }
+
   const idMember = ['string', 'number'].includes(typeof id)
     ? {
         id: id,
@@ -166,11 +199,13 @@ function maybeCData(value: any) {
 
 function propertiesToTags(properties: Feature['properties']): Element[] {
   if (!properties) return [];
-  const { name, description, visibility, ...otherProperties } = properties;
+  const { name, description, visibility, icon, ...otherProperties } =
+    properties;
 
   return [
     name && x('name', [u('text', toString(name))]),
     description && x('description', [u('text', maybeCData(description))]),
+    icon && x('icon', [u('text', maybeCData(icon))]),
     visibility !== undefined &&
       x('visibility', [u('text', visibility ? '1' : '0')]),
     x(
