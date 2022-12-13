@@ -38,7 +38,7 @@ export default [
     output: {
       file: 'dist/tokml.umd.js',
       format: 'umd',
-      name: 'toGeoJSON',
+      name: 'toKML',
       sourcemap,
     },
     plugins: [typescript(), nodeResolve(), terser()],
