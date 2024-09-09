@@ -32,7 +32,7 @@
 		"test": "vitest",
 		"lint": "eslint . && tsc --noEmit",
 		"doc": "typedoc --options typedoc.json",
-		"prepublish": "rollup -c rollup.config.mjs && npm run doc && cp CNAME docs/CNAME",
+		"prepublish": "rollup -c rollup.config.mjs && cp CNAME docs/CNAME",
 		"release": "standard-version"
 	},
 	"devDependencies": {
