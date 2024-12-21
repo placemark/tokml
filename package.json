@@ -45,9 +45,7 @@
 		"unist-builder": "^3.0.0",
 		"vitest": "^0.24.4",
 		"xast-util-to-xml": "^3.0.0",
-		"xastscript": "^3.0.0"
-	},
-	"dependencies": {
+		"xastscript": "^3.0.0",
 		"@biomejs/biome": "^1.9.4"
 	}
 }
