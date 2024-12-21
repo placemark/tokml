@@ -40,6 +40,7 @@
 		"@rollup/plugin-typescript": "^9.0.2",
 		"@tmcw/togeojson": "5.4.0",
 		"@types/geojson": "^7946.0.8",
+		"@types/xast": "^2.0.4",
 		"eslint": "^8.18.0",
 		"rollup": "4.28.1",
 		"rollup-plugin-dts": "^5.0.0",
@@ -50,7 +51,6 @@
 		"typescript": "^4.7.4",
 		"unist-builder": "^3.0.0",
 		"vitest": "^0.24.4",
-		"xast": "^0.1.164",
 		"xast-util-to-xml": "^3.0.0",
 		"xastscript": "^3.0.0"
 	}

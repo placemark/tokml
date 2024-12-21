@@ -23,6 +23,9 @@ importers:
       '@types/geojson':
         specifier: ^7946.0.8
         version: 7946.0.15
+      '@types/xast':
+        specifier: ^2.0.4
+        version: 2.0.4
       eslint:
         specifier: ^8.18.0
         version: 8.57.1
@@ -53,9 +56,6 @@ importers:
       vitest:
         specifier: ^0.24.4
         version: 0.24.5(terser@5.37.0)
-      xast:
-        specifier: ^0.1.164
-        version: 0.1.164
       xast-util-to-xml:
         specifier: ^3.0.0
         version: 3.0.2
@@ -366,6 +366,9 @@ packages:
 
   '@types/xast@1.0.7':
     resolution: {integrity: sha512-QkazU2uUKr+9u7EsMfDoNQ9UtWB6sfOIGbNevJme8qQMeAHEnHmCfbsBJf2eXUm+07kFQfUKbCQp/Y6/8O25kw==}
+
+  '@types/xast@2.0.4':
+    resolution: {integrity: sha512-6Q6HWhHXR5EEKcxgF5YBW5XPAAtCi/GgyCWHx6wR7dZTXF5rv2B2fm0hgpSscJqaVDVm6n1DAVbsM8RSM5PlMw==}
 
   '@ungap/structured-clone@1.2.1':
     resolution: {integrity: sha512-fEzPV3hSkSMltkw152tJKNARhOupqbH96MZWyRjNaYZOMIzbrTeQDG+MTc6Mr2pgzFQzFxAfmhGDNP5QK++2ZA==}
@@ -1657,9 +1660,6 @@ packages:
   xast-util-to-xml@3.0.2:
     resolution: {integrity: sha512-lbnJEVui7Lk9W/TydInkin5OnOyTAr2b4OpK5YjXo94qqoXaR6mFE/evXfOrBev9EnD91r0FOPxrLfTT0qLITQ==}
 
-  xast@0.1.164:
-    resolution: {integrity: sha512-rzmaDg06q6UEkGFljJjWCRverfv0C6qNt1B7CJxK5MRdbrJygT2TXcjUixFdAQwoYEbiSscCA5TiWLJcStydJA==}
-
   xastscript@3.1.1:
     resolution: {integrity: sha512-rE7oVPLENyIZNKeRkXE96ao/QiucenYROqdBnEuNNkQHlyxf3vJ5EMNh2QQ4AYhdf9v/dVuxJ7F4u4AaOOhkOA==}
 
@@ -1919,6 +1919,10 @@ snapshots:
   '@types/unist@2.0.11': {}
 
   '@types/xast@1.0.7':
+    dependencies:
+      '@types/unist': 2.0.11
+
+  '@types/xast@2.0.4':
     dependencies:
       '@types/unist': 2.0.11
 
@@ -3185,8 +3189,6 @@ snapshots:
       '@types/xast': 1.0.7
       ccount: 2.0.1
       stringify-entities: 4.0.4
-
-  xast@0.1.164: {}
 
   xastscript@3.1.1:
     dependencies:
