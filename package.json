@@ -1,6 +1,6 @@
 {
 	"name": "@placemarkio/tokml",
-	"version": "0.3.4",
+	"version": "0.3.5",
 	"description": "Convert GeoJSON to KML",
 	"main": "dist/tokml.cjs",
 	"module": "dist/tokml.es.mjs",
@@ -12,7 +12,10 @@
 		"types": "./dist/index.d.ts",
 		"default": "./dist/tokml.es.mjs"
 	},
-	"keywords": ["kml", "geojson"],
+	"keywords": [
+		"kml",
+		"geojson"
+	],
 	"publishConfig": {
 		"access": "public"
 	},
@@ -21,7 +24,9 @@
 			"pre-commit": "pnpm lint"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"test": "vitest",
 		"lint": "biome check",
