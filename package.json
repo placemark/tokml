@@ -9,8 +9,8 @@
 	"license": "MIT",
 	"exports": {
 		"require": "./dist/tokml.cjs",
-		"default": "./dist/tokml.es.mjs",
-		"types": "./dist/index.d.ts"
+		"types": "./dist/index.d.ts",
+		"default": "./dist/tokml.es.mjs"
 	},
 	"keywords": [
 		"kml",
@@ -47,7 +47,7 @@
 		"@types/geojson": "^7946.0.8",
 		"eslint": "^8.18.0",
 		"prettier": "^2.7.1",
-		"rollup": "^3.2.4",
+		"rollup": "4.28.1",
 		"rollup-plugin-dts": "^5.0.0",
 		"rollup-plugin-terser": "^7.0.2",
 		"standard-version": "^9.5.0",
