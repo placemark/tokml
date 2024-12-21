@@ -35,6 +35,7 @@
 		"release": "standard-version"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
 		"@rollup/plugin-node-resolve": "^15.0.1",
 		"@rollup/plugin-typescript": "^9.0.2",
 		"@tmcw/togeojson": "5.4.0",
@@ -49,8 +50,8 @@
 		"typescript": "^4.7.4",
 		"unist-builder": "^3.0.0",
 		"vitest": "^0.24.4",
+		"xast": "^0.1.164",
 		"xast-util-to-xml": "^3.0.0",
-		"xastscript": "^3.0.0",
-		"@biomejs/biome": "^1.9.4"
+		"xastscript": "^3.0.0"
 	}
 }
