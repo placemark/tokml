@@ -1,4 +1,4 @@
-const { toKML } = require('./tokml/lib/index.ts');
+const { toKML } = require('./dist/tokml.cjs');
 
 // Test simple case
 const result = toKML({

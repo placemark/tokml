@@ -1,7 +1,7 @@
 import type { Folder, Root } from "@tmcw/togeojson";
 import type { Feature, FeatureCollection, Geometry, Position } from "geojson";
 import { u } from "unist-builder";
-import type { Element } from "xast";
+import type { Element, Node } from "xast";
 import { toXml } from "xast-util-to-xml";
 import { x } from "xastscript";
 
@@ -9,6 +9,54 @@ type F = Feature<Geometry | null>;
 
 const BR = u("text", "\n");
 const TAB = u("text", "  ");
+
+// Logging configuration
+export interface LoggerConfig {
+	enabled: boolean;
+	level: "debug" | "info" | "warn" | "error";
+}
+
+let loggerConfig: LoggerConfig = {
+	enabled: false,
+	level: "info",
+};
+
+const log = {
+	debug: (message: string, ...args: any[]) => {
+		if (loggerConfig.enabled && shouldLog("debug")) {
+			console.debug(`[tokml:debug] ${message}`, ...args);
+		}
+	},
+	info: (message: string, ...args: any[]) => {
+		if (loggerConfig.enabled && shouldLog("info")) {
+			console.info(`[tokml:info] ${message}`, ...args);
+		}
+	},
+	warn: (message: string, ...args: any[]) => {
+		if (loggerConfig.enabled && shouldLog("warn")) {
+			console.warn(`[tokml:warn] ${message}`, ...args);
+		}
+	},
+	error: (message: string, ...args: any[]) => {
+		if (loggerConfig.enabled && shouldLog("error")) {
+			console.error(`[tokml:error] ${message}`, ...args);
+		}
+	},
+};
+
+function shouldLog(level: "debug" | "info" | "warn" | "error"): boolean {
+	const levels = ["debug", "info", "warn", "error"];
+	return levels.indexOf(level) >= levels.indexOf(loggerConfig.level);
+}
+
+/**
+ * Configure logging for the tokml library
+ * @param config - Logger configuration
+ */
+export function setLoggerConfig(config: Partial<LoggerConfig>): void {
+	loggerConfig = { ...loggerConfig, ...config };
+	log.info("Logger configuration updated", loggerConfig);
+}
 
 type Literal = typeof BR;
 
@@ -19,17 +67,34 @@ type Literal = typeof BR;
  * starting with a root element.
  */
 export function foldersToKML(root: Root): string {
+	log.info("Starting foldersToKML conversion", {
+		childrenCount: root.children.length,
+	});
+
+	const styles: Element[] = [];
+	const featureIndex = { value: 0 };
+
+	const children = root.children.flatMap((child) => {
+		return convertChild(child, styles, featureIndex);
+	});
+
+	log.info("Conversion completed", {
+		stylesGenerated: styles.length,
+		featuresProcessed: featureIndex.value,
+		totalChildren: children.length,
+	});
+
 	return toXml(
-		u("root", [
-			x(
-				"kml",
-				{ xmlns: "http://www.opengis.net/kml/2.2" },
+		u("root", {
+			children: [
 				x(
-					"Document",
-					root.children.flatMap((child) => convertChild(child)),
+					"kml",
+					{ xmlns: "http://www.opengis.net/kml/2.2" },
+					// @ts-ignore - TypeScript has trouble with mixed array types but this works correctly
+					x("Document", [...styles, ...children.flat()]),
 				),
-			),
-		]),
+			],
+		}),
 	);
 }
 
@@ -40,32 +105,67 @@ export function foldersToKML(root: Root): string {
 export function toKML(
 	featureCollection: FeatureCollection<Geometry | null>,
 ): string {
+	log.info("Starting toKML conversion", {
+		featuresCount: featureCollection.features.length,
+	});
+
+	const styles: Element[] = [];
+	const features = featureCollection.features.map((feature, index) => {
+		const style = createStyleFromFeature(feature, index);
+		if (style) {
+			styles.push(style);
+			log.debug("Created style for feature", {
+				index,
+				color: feature.properties?.color,
+			});
+		}
+		return convertFeature(feature, index);
+	});
+
+	log.info("Conversion completed", {
+		stylesGenerated: styles.length,
+		featuresProcessed: features.length,
+	});
+
 	return toXml(
-		u("root", [
-			x(
-				"kml",
-				{ xmlns: "http://www.opengis.net/kml/2.2" },
+		u("root", {
+			children: [
 				x(
-					"Document",
-					featureCollection.features.flatMap((feature) =>
-						convertFeature(feature),
-					),
+					"kml",
+					{ xmlns: "http://www.opengis.net/kml/2.2" },
+					// @ts-ignore - TypeScript has trouble with mixed array types but this works correctly
+					x("Document", [...styles, ...features.flat()]),
 				),
-			),
-		]),
+			],
+		}),
 	);
 }
 
-function convertChild(child: F | Folder) {
+function convertChild(
+	child: F | Folder,
+	styles?: Element[],
+	featureIndex?: { value: number },
+): Array<Literal | Element> {
 	switch (child.type) {
-		case "Feature":
-			return convertFeature(child);
+		case "Feature": {
+			const index = featureIndex?.value ?? 0;
+			if (featureIndex) featureIndex.value++;
+			const style = createStyleFromFeature(child, index);
+			if (style && styles) {
+				styles.push(style);
+			}
+			return convertFeature(child, index);
+		}
 		case "folder":
-			return convertFolder(child);
+			return convertFolder(child, styles, featureIndex);
 	}
 }
 
-function convertFolder(folder: Folder): Array<Literal | Element> {
+function convertFolder(
+	folder: Folder,
+	styles?: Element[],
+	featureIndex?: { value: number },
+): Array<Literal | Element> {
 	const id = ["string", "number"].includes(typeof folder.meta.id)
 		? {
 				id: String(folder.meta.id),
@@ -78,7 +178,9 @@ function convertFolder(folder: Folder): Array<Literal | Element> {
 			...folderMeta(folder.meta),
 			BR,
 			TAB,
-			...folder.children.flatMap((child) => convertChild(child)),
+			...folder.children.flatMap((child) =>
+				convertChild(child, styles, featureIndex),
+			),
 		]),
 	];
 }
@@ -98,18 +200,86 @@ function folderMeta(meta: Folder["meta"]): Element[] {
 	});
 }
 
-function convertFeature(feature: F) {
+function createStyleFromFeature(feature: F, index: number): Element | null {
+	if (!feature.properties?.color) {
+		log.debug("No color property found for feature", { index });
+		return null;
+	}
+
+	const color = feature.properties.color;
+
+	// Validate hex color format
+	if (
+		typeof color !== "string" ||
+		!color.startsWith("#") ||
+		color.length !== 7
+	) {
+		log.warn("Invalid color format detected", {
+			index,
+			color,
+			expected: "#RRGGBB",
+		});
+	}
+
+	// Convert hex color to KML format (AABBGGRR)
+	const kmlColor = `ff${color.slice(1)}`;
+	const kmlFillColor = `ff${color.slice(1)}`;
+
+	log.debug("Converting color to KML format", {
+		index,
+		originalColor: color,
+		kmlColor,
+		styleId: `style_${index}`,
+	});
+
+	return x("Style", { id: `style_${index}` }, [
+		BR,
+		TAB,
+		x("LineStyle", [BR, TAB, TAB, x("color", [u("text", kmlColor)]), BR, TAB]),
+		BR,
+		TAB,
+		x("PolyStyle", [
+			BR,
+			TAB,
+			TAB,
+			x("color", [u("text", kmlFillColor)]),
+			BR,
+			TAB,
+		]),
+		BR,
+	]);
+}
+
+function convertFeature(feature: F, index?: number) {
+	log.debug("Converting feature", {
+		index,
+		featureId: feature.id,
+		geometryType: feature.geometry?.type,
+		hasColor: !!feature.properties?.color,
+	});
+
 	const { id } = feature;
 	const idMember = ["string", "number"].includes(typeof id)
 		? {
 				id: id,
 			}
 		: {};
+
+	const styleElements = [];
+	if (feature.properties?.color && typeof index === "number") {
+		styleElements.push(BR, TAB, x("styleUrl", [u("text", `#style_${index}`)]));
+		log.debug("Added style reference to feature", {
+			index,
+			styleId: `style_${index}`,
+		});
+	}
+
 	return [
 		BR,
 		x("Placemark", idMember, [
 			BR,
 			...propertiesToTags(feature.properties),
+			...styleElements,
 			BR,
 			TAB,
 			...(feature.geometry ? [convertGeometry(feature.geometry)] : []),
