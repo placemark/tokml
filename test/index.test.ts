@@ -48,12 +48,12 @@ describe('foldersToKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <Point><coordinates>0,2</coordinates></Point></Placemark>
-      <Folder id=\\"f00\\">
+      <Folder id="f00">
       <name>Hi</name>
         </Folder>
       <Folder>
@@ -61,7 +61,7 @@ describe('foldersToKML', () => {
         
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <LineString><coordinates>0,2
       1,2</coordinates></LineString></Placemark></Folder></Document></kml>"
     `);
@@ -98,14 +98,14 @@ describe('foldersToKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <Point><coordinates>0,2</coordinates></Point></Placemark>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <LineString><coordinates>0,2
       1,2</coordinates></LineString></Placemark></Document></kml>"
     `);
@@ -162,20 +162,20 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <Point><coordinates>0,2</coordinates></Point></Placemark>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <MultiGeometry>
       <Point><coordinates>0,2</coordinates></Point>
       <Point><coordinates>1,2</coordinates></Point></MultiGeometry></Placemark>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <LineString><coordinates>0,2
       1,2</coordinates></LineString></Placemark></Document></kml>"
     `);
@@ -212,10 +212,10 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <Polygon>
       <outerBoundaryIs>
         <LinearRing><coordinates>0,2
@@ -261,10 +261,10 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <MultiGeometry>
       <LineString><coordinates>0,2
       1,2
@@ -310,10 +310,10 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data></ExtendedData>
         <MultiGeometry>
       <Polygon>
       <outerBoundaryIs>
@@ -348,12 +348,12 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <ExtendedData>
-        <Data name=\\"foo\\"><value>bar</value></Data>
-        <Data name=\\"bar\\"><value>{\\"x\\":1}</value></Data>
-        <Data name=\\"q\\"><value>1</value></Data></ExtendedData>
+        <Data name="foo"><value>bar</value></Data>
+        <Data name="bar"><value>{"x":1}</value></Data>
+        <Data name="q"><value>1</value></Data></ExtendedData>
         <MultiGeometry>
       <Point><coordinates>0,1</coordinates></Point></MultiGeometry></Placemark></Document></kml>"
     `);
@@ -370,7 +370,7 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
 
         <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
@@ -391,7 +391,7 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <description>test</description><ExtendedData></ExtendedData>
         <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
@@ -412,7 +412,7 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <name>bar</name><ExtendedData></ExtendedData>
         </Placemark></Document></kml>"
@@ -433,7 +433,7 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <name>bar</name><ExtendedData></ExtendedData>
         <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
@@ -456,7 +456,7 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <name>bar</name><ExtendedData></ExtendedData>
         <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
@@ -479,8 +479,8 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
-      <Placemark id=\\"42\\">
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+      <Placemark id="42">
       <name>bar</name><ExtendedData></ExtendedData>
         <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
     `);
@@ -503,9 +503,9 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
-      <Placemark id=\\"42\\">
-      <name>{\\"x\\":\\"bar\\"}</name><ExtendedData></ExtendedData>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+      <Placemark id="42">
+      <name>{"x":"bar"}</name><ExtendedData></ExtendedData>
         <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
     `);
   });
@@ -535,7 +535,7 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark>
       <visibility>0</visibility><ExtendedData></ExtendedData>
         <Point><coordinates>0,1</coordinates></Point></Placemark>
@@ -563,8 +563,8 @@ describe('toKML', () => {
         ],
       })
     ).toMatchInlineSnapshot(`
-      "<kml xmlns=\\"http://www.opengis.net/kml/2.2\\"><Document>
-      <Placemark id=\\"42\\">
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+      <Placemark id="42">
       <name>bar</name><description><![CDATA[<b>bar</b>]]></description><ExtendedData></ExtendedData>
         <Point><coordinates>0,1</coordinates></Point></Placemark></Document></kml>"
     `);
