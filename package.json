@@ -7,6 +7,11 @@
 	"typings": "dist/index.d.ts",
 	"author": "Tom MacWright",
 	"license": "MIT",
+  "homepage": "https://github.com/placemark/tokml",
+  "repository": {
+    "url": "https://github.com/placemark/tokml",
+    "type": "git"
+  },
 	"exports": {
 		"require": "./dist/tokml.cjs",
 		"types": "./dist/index.d.ts",
