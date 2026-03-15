@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.9
+
+### Patch Changes
+
+- fd95fba: Drop UMD build
+
 ## 0.3.8
 
 ### Patch Changes
