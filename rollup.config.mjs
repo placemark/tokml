@@ -1,4 +1,3 @@
-import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
 import dts from 'rollup-plugin-dts';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
@@ -32,15 +31,5 @@ export default [
       sourcemap,
     },
     plugins: [typescript(), nodeResolve()],
-  },
-  {
-    input,
-    output: {
-      file: 'dist/tokml.umd.js',
-      format: 'umd',
-      name: 'toKML',
-      sourcemap,
-    },
-    plugins: [typescript(), nodeResolve(), terser()],
-  },
+  }
 ];
