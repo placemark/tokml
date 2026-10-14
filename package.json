@@ -39,20 +39,20 @@
 		"prepublish": "rollup -c rollup.config.mjs && cp CNAME docs/CNAME"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.7",
-		"@changesets/cli": "^2.30.0",
+		"@biomejs/biome": "^2.5.15",
+		"@changesets/cli": "^2.31.1",
 		"@rollup/plugin-node-resolve": "^16.0.3",
 		"@rollup/plugin-typescript": "^12.3.0",
 		"@tmcw/togeojson": "7.1.2",
 		"@types/geojson": "^7946.0.16",
 		"@types/xast": "^2.0.4",
 		"rollup": "4.59.0",
-		"rollup-plugin-dts": "^6.4.0",
+		"rollup-plugin-dts": "^6.5.1",
 		"tslib": "^2.8.1",
-		"typedoc": "^0.28.17",
+		"typedoc": "^0.28.20",
 		"typescript": "^5.9.3",
 		"unist-builder": "^4.0.0",
-		"vitest": "^4.1.0",
+		"vitest": "^4.1.11",
 		"xast-util-to-xml": "^4.0.0",
 		"xastscript": "^4.0.0"
 	}
