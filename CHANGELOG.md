@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- 2df8b29: Support altitude in exported KML
+
 ## 0.3.9
 
 ### Patch Changes
