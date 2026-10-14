@@ -118,7 +118,9 @@ function convertFeature(feature: F) {
 }
 
 function join(position: Position): string {
-	return `${position[0]},${position[1]}`;
+	return position.length > 2
+		? `${position[0]},${position[1]},${position[2]}`
+		: `${position[0]},${position[1]}`;
 }
 
 function coord1(coordinates: Position): Element {
