@@ -10,7 +10,13 @@ type F = Feature<Geometry | null>;
 const BR = u("text", "\n");
 const TAB = u("text", "  ");
 
+type HasAltitude = [boolean];
 type Literal = typeof BR;
+
+function altitudeMode(hasAltitude: HasAltitude) {
+	if (hasAltitude[0]) return x("altitudeMode", [u("text", "absolute")]);
+	return null;
+}
 
 /**
  * Convert nested folder structure to KML. This expects
@@ -117,18 +123,25 @@ function convertFeature(feature: F) {
 	];
 }
 
-function join(position: Position): string {
-	return position.length > 2
+function join(position: Position, hasAltitude: HasAltitude): string {
+	const has = position.length > 2;
+	if (has) hasAltitude[0] = true;
+	return has
 		? `${position[0]},${position[1]},${position[2]}`
 		: `${position[0]},${position[1]}`;
 }
 
-function coord1(coordinates: Position): Element {
-	return x("coordinates", [u("text", join(coordinates))]);
+function coord1(coordinates: Position, hasAltitude: HasAltitude): Element {
+	return x("coordinates", [u("text", join(coordinates, hasAltitude))]);
 }
 
-function coord2(coordinates: Position[]): Element {
-	return x("coordinates", [u("text", coordinates.map(join).join("\n"))]);
+function coord2(coordinates: Position[], hasAltitude: HasAltitude): Element {
+	return x("coordinates", [
+		u(
+			"text",
+			coordinates.map((coordinate) => join(coordinate, hasAltitude)).join("\n"),
+		),
+	]);
 }
 
 function valueToString(value: any): string {
@@ -193,8 +206,8 @@ function propertiesToTags(properties: Feature["properties"]): Element[] {
 	].filter(Boolean);
 }
 
-const linearRing = (ring: Position[]): Element =>
-	x("LinearRing", [coord2(ring)]);
+const linearRing = (ring: Position[], hasAltitude: HasAltitude): Element =>
+	x("LinearRing", [coord2(ring, hasAltitude)]);
 
 function convertMultiPoint(geometry: GeoJSON.MultiPoint): Element {
 	return x(
@@ -208,6 +221,7 @@ function convertMultiPoint(geometry: GeoJSON.MultiPoint): Element {
 		]),
 	);
 }
+
 function convertMultiLineString(geometry: GeoJSON.MultiLineString): Element {
 	return x(
 		"MultiGeometry",
@@ -236,28 +250,37 @@ function convertMultiPolygon(geometry: GeoJSON.MultiPolygon): Element {
 
 function convertPolygon(geometry: GeoJSON.Polygon): Element {
 	const [outerBoundary, ...innerRings] = geometry.coordinates;
-	return x("Polygon", [
-		BR,
-		x("outerBoundaryIs", [BR, TAB, linearRing(outerBoundary)]),
+	const hasAltitude: HasAltitude = [false];
+
+	const rings = [
+		x("outerBoundaryIs", [BR, TAB, linearRing(outerBoundary, hasAltitude)]),
 		...innerRings.flatMap((innerRing) => [
 			BR,
-			x("innerBoundaryIs", [BR, TAB, linearRing(innerRing)]),
+			x("innerBoundaryIs", [BR, TAB, linearRing(innerRing, hasAltitude)]),
 		]),
-	]);
+	];
+
+	return x("Polygon", [BR, altitudeMode(hasAltitude), ...rings]);
 }
 
 function convertGeometry(geometry: Geometry): Element {
 	switch (geometry.type) {
-		case "Point":
-			return x("Point", [coord1(geometry.coordinates)]);
-		case "MultiPoint":
-			return convertMultiPoint(geometry);
-		case "LineString":
-			return x("LineString", [coord2(geometry.coordinates)]);
-		case "MultiLineString":
-			return convertMultiLineString(geometry);
+		case "Point": {
+			const hasAltitude: HasAltitude = [false];
+			const coord = coord1(geometry.coordinates, hasAltitude);
+			return x("Point", [altitudeMode(hasAltitude), coord]);
+		}
+		case "LineString": {
+			const hasAltitude: HasAltitude = [false];
+			const coord = coord2(geometry.coordinates, hasAltitude);
+			return x("LineString", [altitudeMode(hasAltitude), coord]);
+		}
 		case "Polygon":
 			return convertPolygon(geometry);
+		case "MultiPoint":
+			return convertMultiPoint(geometry);
+		case "MultiLineString":
+			return convertMultiLineString(geometry);
 		case "MultiPolygon":
 			return convertMultiPolygon(geometry);
 		case "GeometryCollection":

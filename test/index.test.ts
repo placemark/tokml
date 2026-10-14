@@ -440,29 +440,6 @@ describe('toKML', () => {
     `);
   });
 
-  it('ignores coordinates past #2', () => {
-    expect(
-      toKML({
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {
-              name: 'bar',
-            },
-
-            geometry: { type: 'Point', coordinates: [0, 1, 2] },
-          },
-        ],
-      })
-    ).toMatchInlineSnapshot(`
-      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
-      <Placemark>
-      <name>bar</name><ExtendedData></ExtendedData>
-        <Point><coordinates>0,1,2</coordinates></Point></Placemark></Document></kml>"
-    `);
-  });
-
   it('includes feature id', () => {
     expect(
       toKML({
@@ -587,7 +564,27 @@ describe('toKML', () => {
       "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
       <Placemark id="42">
       <ExtendedData></ExtendedData>
-        <Point><coordinates>0,1,2</coordinates></Point></Placemark></Document></kml>"
+        <Point><altitudeMode>absolute</altitudeMode><coordinates>0,1,2</coordinates></Point></Placemark></Document></kml>"
+    `);
+
+    expect(
+      toKML({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            id: 42,
+            properties: {},
+            geometry: { type: 'LineString', coordinates: [[0, 1, 2], [1, 2, 3]] },
+          },
+        ],
+      })
+    ).toMatchInlineSnapshot(`
+      "<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+      <Placemark id="42">
+      <ExtendedData></ExtendedData>
+        <LineString><altitudeMode>absolute</altitudeMode><coordinates>0,1,2
+      1,2,3</coordinates></LineString></Placemark></Document></kml>"
     `);
   });
 });
